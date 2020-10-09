@@ -2,7 +2,7 @@ package web.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import web.dao.UserDAO;
+import web.model.DTO.*;
 
 import javax.persistence.*;
 import java.util.*;
@@ -23,13 +23,13 @@ public class User implements UserDetails {
     @Transient
     private String[] sel_roles;
 
-    public User(UserDAO userDAO) {
-        this.id = userDAO.getId();
-        this.name = userDAO.getName();
-        this.lastname = userDAO.getLastname();
-        this.age = userDAO.getAge();
-        this.city = userDAO.getCity();
-        this.password = userDAO.getPassword();
+    public User(UserDTO userDTO) {
+        this.id = userDTO.getId();
+        this.name = userDTO.getName();
+        this.lastname = userDTO.getLastname();
+        this.age = userDTO.getAge();
+        this.city = userDTO.getCity();
+        this.password = userDTO.getPassword();
     }
 
     public String[] getSel_roles_string() {

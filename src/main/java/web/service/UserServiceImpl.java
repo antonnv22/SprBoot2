@@ -15,15 +15,17 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class UserDetailsServiceImpl implements UserService, UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
+public class UserServiceImpl implements UserService, UserDetailsService {
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private PasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    PasswordEncoder bCryptPasswordEncoder;
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+    }
 
     @Override
     public Iterable<User> allUsers() {

@@ -6,29 +6,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import web.dao.UserDAO;
+import web.model.DTO.*;
 import web.model.Role;
 import web.model.User;
 import web.repository.RoleRepository;
-import web.service.UserDetailsServiceImpl;
-import web.service.UserService;
+import web.service.UserServiceImpl;
 
 import java.util.*;
 
 @Controller
 public class AdminController {
-    private final UserDetailsServiceImpl userService;
+    private final UserServiceImpl userService;
+    private final RoleRepository roleRepository;
+    private static final String admin_url = "/admin";
 
-    @Autowired
-    PasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    public AdminController(UserDetailsServiceImpl userService) {
+    public AdminController(UserServiceImpl userService, RoleRepository roleRepository) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
     }
 
-    @GetMapping("/admin")
+    @GetMapping(admin_url)
     public ModelAndView allUsers() {
         List<User> users = new ArrayList<>();
         userService.allUsers().forEach(users::add);
@@ -38,7 +35,7 @@ public class AdminController {
         return modelAndView;
     }
 
-    @GetMapping(value = "/admin/add")
+    @GetMapping(admin_url + "/add")
     public String addPage() {
         return "addUser";
     }
@@ -49,7 +46,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping(value = "/admin/edit/{id}")
+    @GetMapping(admin_url + "/edit/{id}")
     public ModelAndView editPage(@PathVariable("id") long id) {
         User user = userService.getById(id);
         ModelAndView modelAndView = new ModelAndView();
@@ -59,15 +56,16 @@ public class AdminController {
         modelAndView.addObject("rolelist", rolelist);
         return modelAndView;
     }
-    @PostMapping(value = "/admin/edit")
-    public String editUser(@ModelAttribute("user") UserDAO userDAO,
+
+    @PostMapping(admin_url + "/edit")
+    public String editUser(@ModelAttribute("user") UserDTO userDTO,
                            @RequestParam(value = "sel_roles", required = false) String[] sel_roles,
                            BindingResult result
     ) {
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
 
         }
-        User user = new User(userDAO);
+        User user = new User(userDTO);
         Set<Role> Setroles = new HashSet<>();
         if (sel_roles != null) {
             for (String st : sel_roles) {
@@ -98,7 +96,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping(value = "/admin/delete/{id}")
+    @GetMapping(admin_url + "/delete/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         User user = userService.getById(id);
         userService.delete(user);

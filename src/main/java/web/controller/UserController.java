@@ -7,7 +7,7 @@ import web.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
-import web.service.UserDetailsServiceImpl;
+import web.service.UserServiceImpl;
 import web.service.UserService;
 
 import java.util.ArrayList;
@@ -16,8 +16,9 @@ import java.util.List;
 @Controller
 public class UserController {
     private final UserService userService;
+
     @Autowired
-    public UserController(UserDetailsServiceImpl userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

@@ -1,6 +1,6 @@
-package web.dao;
+package web.model.DTO;
 
-public class UserDAO {
+public class UserDTO {
     private Long id;
     private String name;
     private String lastname;
@@ -8,7 +8,7 @@ public class UserDAO {
     private String city;
     private String password;
 
-    public UserDAO(Long id, String name, String lastname, byte age, String city, String password) {
+    public UserDTO(Long id, String name, String lastname, byte age, String city, String password) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
