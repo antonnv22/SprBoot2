@@ -15,17 +15,17 @@ import web.service.UserServiceImpl;
 import java.util.*;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
     private final UserServiceImpl userService;
     private final RoleRepository roleRepository;
-    private static final String admin_url = "/admin";
 
     public AdminController(UserServiceImpl userService, RoleRepository roleRepository) {
         this.userService = userService;
         this.roleRepository = roleRepository;
     }
 
-    @GetMapping(admin_url)
+    @GetMapping
     public ModelAndView allUsers() {
         List<User> users = new ArrayList<>();
         userService.allUsers().forEach(users::add);
@@ -35,18 +35,18 @@ public class AdminController {
         return modelAndView;
     }
 
-    @GetMapping(admin_url + "/add")
+    @GetMapping("/add")
     public String addPage() {
         return "addUser";
     }
 
-    @PostMapping(value = "/admin/add")
+    @PostMapping(value = "/add")
     public String addUser(@ModelAttribute("user") User user) {
         userService.save(user);
         return "redirect:/admin";
     }
 
-    @GetMapping(admin_url + "/edit/{id}")
+    @GetMapping("/edit/{id}")
     public ModelAndView editPage(@PathVariable("id") long id) {
         User user = userService.getById(id);
         ModelAndView modelAndView = new ModelAndView();
@@ -57,7 +57,7 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PostMapping(admin_url + "/edit")
+    @PostMapping("/edit")
     public String editUser(@ModelAttribute("user") UserDTO userDTO,
                            @RequestParam(value = "sel_roles", required = false) String[] sel_roles,
                            BindingResult result
@@ -96,7 +96,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping(admin_url + "/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         User user = userService.getById(id);
         userService.delete(user);
